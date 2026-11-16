@@ -1,0 +1,202 @@
+
+<!DOCTYPE html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><title>英語 一問一答</title>
+<style>
+:root{--bg:#fff;--fg:#1c1c1e;--card:#f3f4f7;--ac:#2f6fed;--ok:#1a8f4c;--ng:#d33;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#17181b;--fg:#eee;--card:#25272c;--ac:#6b9bff;--ok:#4cc77f;--ng:#ff6b6b}}
+body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.6 -apple-system,"Hiragino Sans",sans-serif;max-width:640px;margin:auto;padding:16px}
+.card{background:var(--card);border-radius:14px;padding:16px;margin:12px 0}
+button{font:inherit;color:var(--fg);background:var(--card);border:2px solid transparent;border-radius:12px;padding:12px;width:100%;text-align:left;margin:6px 0}
+button.p{background:var(--ac);color:#fff;text-align:center}
+.ok{border-color:var(--ok)!important}.ng{border-color:var(--ng)!important}
+.s{font-size:13px;opacity:.7}h1{font-size:20px}
+</style></head><body><div id="app"></div>
+<script>
+// [問題文, [選択肢1-4], 正解番号, 日本語訳, 解説]  ← 行を足せば問題を増やせます
+const Q=[
+["(5) I speak German (　　) as he does.",["better","as better","as well","as best"],3,"私は彼と同じくらい上手にドイツ語を話す。","well の原級比較 as well as ～。"],
+["(6) He was absent from school yesterday (　　).",["because he had a cold","because of he had a cold","because his cold"],1,"彼は風邪をひいていたので昨日学校を休んだ。","because の後はSV。because of の後は名詞。"],
+["(7) Bill is (　　) you think.",["not as silly as","not as silly than","not silly than","not so silly that"],1,"ビルはあなたが思うほど愚かではない。","not as ～ as … で「…ほど～ではない」。"],
+["(8) Let me take a look at this photo, (　　)?",["don't you","will you","don't we","shall we"],2,"この写真を見せてください。","Let me ～ の付加疑問は will you?（Let's ～ なら shall we?）"],
+["(9) He can do (　　) he likes with the money.",["that","whatever","which","however"],2,"彼はそのお金で好きなことは何でもできる。","whatever = anything that。do の目的語＋likes の目的語を兼ねる。"],
+["(10) Mrs. Brown asked me (　　) I liked coffee.",["if","that","which","as if"],1,"ブラウン夫人は私にコーヒーが好きかどうか尋ねた。","ask＋if ～「～かどうか」。"],
+["(11) I think he is the only person (　　) can do the job.",["that","whose","which","of which"],1,"彼にしかその仕事はできないと思う。","先行詞に the only がつくと関係代名詞は that。"],
+["(12) “Do you think he's coming?” “I'm afraid (　　).”",["either","it","neither","not"],4,"「彼は来ると思う？」「残念ながら来ないと思う。」","I'm afraid not. = I'm afraid he isn't coming."],
+["(13) Mr. Miller walked (　　) the forest.",["among","across","over","through"],4,"ミラー氏は森を歩いて通り抜けた。","through は「(中)を通り抜けて」。"],
+["(14) We went by taxi; (　　) we would have been late.",["otherwise","therefore","in particular","instead"],1,"私たちはタクシーで行った。そうでなければ遅れていただろう。","otherwise「さもなければ」＝仮定法の内容を含む。"],
+["(15) He was born in the area (　　) is now called Harajuku.",["what","how","which","where"],3,"彼は現在原宿と呼ばれる地域で生まれた。","空所の後に主語がない → 主格の関係代名詞 which。"],
+["(16) The airplane left Narita (　　) eleven in the morning.",["of","at","on","in"],2,"飛行機は午前11時に成田を出発した。","時刻の一点は at。"],
+["(17) (　　) you are a university student, you should study English much harder.",["So far","Now that","As far as","Besides"],2,"あなたはもう大学生なのだから、もっと英語を勉強すべきだ。","now that ～「今や～なので」（理由）。"],
+["(18) Had I not missed the train, I (　　) in time for the party.",["would arrive","arrived","would have arrived","had arrived"],3,"もしあの電車に乗り遅れなければ、パーティーに間に合っただろう。","If I had not missed の倒置。主節は would have＋過去分詞。"],
+["(19) No other mountain in Japan is (　　) Mt. Fuji.",["high of","high as","the highest of","higher than"],4,"日本には富士山より高い山はない。","No other ～ is 比較級 than …「…より～なものはない」。"],
+["(20) I hope to finish my work (　　) five o'clock.",["by","till","to","until"],1,"5時までに仕事を終えたい。","完了の期限は by。till/until は継続。"],
+["(21) John came to see you (　　) you were out to lunch.",["for","during","among","while"],4,"あなたが昼食に出ている間にジョンが会いに来た。","後ろにSVがあるので接続詞 while。during は名詞が続く。"],
+["(22) Please take (　　) as you like.",["how many cookies","so much cookies","as many cookies","as much cookies"],3,"好きなだけクッキーを取ってください。","cookies は数えられる → as many ～ as。"],
+["(23) My doctor told me I should neither smoke (　　) drink.",["nor","and","or","but"],1,"医者は私にタバコも酒もやめるよう言った。","neither A nor B。"],
+["(24) The woman became more beautiful (　　) she got older.",["as","before","if","while"],1,"その女性は年をとるにつれてより美しくなった。","as「～につれて」（比例）。"],
+["(25) That is the place (　　) I have lived for a long time.",["which","where","when","what"],2,"そこが私が長年住んできた場所だ。","後ろが完全な文 → 関係副詞 where。"],
+["(26) I would like to go abroad (　　) the summer vacation.",["while","to","during","when"],3,"夏休みの間に海外へ行きたい。","期間を表す名詞の前は during。"],
+["(27) If I (　　) you, I would change my job.",["am","are","be","were"],4,"もし私があなたなら、転職するだろう。","仮定法過去は were。"],
+["(28) He talks as (　　) he knew everything.",["for","if","of","to"],2,"彼はまるで何でも知っているかのように話す。","as if ～「まるで～のように」。"],
+["(29) 金は銀よりもずっと重い。Gold is (　　) than silver.",["much heavier","more heavy","most heavier","the heaviest"],1,"金は銀よりずっと重い。","heavy → heavier。much で強調。"],
+["(30) The girl (　　) is reading a book was born in New York.",["which","who","whom","what"],2,"本を読んでいる少女はニューヨーク生まれだ。","先行詞が人・主格 → who。"],
+["(31) (　　) to his help, the work was done in an hour.",["According","As","Contrary","Thanks"],4,"彼の助けのおかげで、仕事は1時間で終わった。","Thanks to ～「～のおかげで」。"],
+["(32) The smaller the garden, (　　) to look after it.",["it is easier","it is easily","the easier it is","the easily it is"],3,"庭が小さいほど、手入れは楽だ。","the 比較級 ～, the 比較級 …「～するほど…」。"],
+["(33) “How (　　) do you go abroad each year?” “Two or three times.”",["much","many","often","long"],3,"「年に何回海外へ行きますか。」「2、3回です。」","回数・頻度は How often。"],
+["(34) Once a week he goes to work on foot instead (　　) by car.",["from","at","on","of"],4,"週に1回、彼は車ではなく徒歩で通勤する。","instead of ～「～の代わりに」。"],
+["(35) The president and the secretary talked (　　) a cup of coffee.",["of","off","on","over"],4,"社長と秘書はコーヒーを飲みながら話した。","over ～「～しながら」。"],
+["(36) The baby can't even walk, (　　) run.",["much less","much more","little more","more less"],1,"その赤ちゃんは歩くことさえできない、ましてや走れない。","否定文の後の much less ～「まして～ない」。"],
+["(37) “How (　　) does the next bus leave?” “In twenty minutes.”",["much","far","soon","often"],3,"「次のバスはあとどのくらいで出ますか。」「20分後です。」","How soon「あとどのくらいで」。in ～ は「～後に」。"],
+["(38) (　　) you agree or not, I cannot change my mind.",["While","Either","Though","Whether"],4,"あなたが賛成でもそうでなくても、私は考えを変えられない。","Whether ～ or not「～であろうとなかろうと」。"],
+["(39) He is such a kind man (　　) everybody loves him.",["that","when","who"],1,"彼はとても親切な人なので、皆が彼を愛している。","such ～ that …「とても～なので…」。"],
+["(40) 鯨は馬同様に魚ではない。A whale is (　　) a fish than a horse is.",["any more","no more","no less","more like"],2,"鯨が魚でないのは、馬が魚でないのと同じだ。","A is no more B than C is「CがBでないのと同様AもBでない」（鯨の構文）。"],
+["(41) My mother always listens to the radio (　　) driving the car.",["how","where","why","while"],4,"母はいつも車を運転しながらラジオを聞く。","while (she is) driving。接続詞 while の主語省略。"],
+["(42) My grandmother sang an old song the title (　　) I don't remember.",["what","that","of which","which"],3,"祖母は題名を思い出せない古い歌を歌った。","the title of which = その歌の題名。"],
+["(43) I had no sooner sat down to read the newspaper (　　) the telephone rang.",["as","after","than","while"],3,"新聞を読もうと座るやいなや電話が鳴った。","no sooner ～ than …「～するやいなや…」。"],
+["(44) It's after ten o'clock, Jack! It's about time you (　　) to bed.",["will go","had been","have gone","went"],4,"10時過ぎだよ、ジャック！もう寝る時間だよ。","It's about time ＋ 仮定法過去（もう～してよい頃だ）。"],
+["(45) China is a country (　　) I've wanted to visit for a long time.",["which","where","in which","to which"],1,"中国は私が長い間訪れたいと思っていた国だ。","visit の目的語が欠けている → 目的格 which。"],
+["(46) It never rains (　　) it pours.",["as","and","while","but"],4,"降れば必ず土砂降りになる（泣きっ面に蜂）。","It never rains but it pours. のことわざ。"],
+["(47) (　　) another chance, he would do his best.",["Be given he should","He should be given","Should he be given"],3,"もう一度チャンスを与えられれば、彼は全力を尽くすだろう。","If he should be given の if を省略した倒置。"],
+["(48) If I had worked harder in my twenties, I (　　) much richer now.",["am","would be","will be","would have"],2,"20代でもっと一生懸命働いていれば、今ずっと裕福だろうに。","if＋過去完了、now があるので主節は would be（混合型）。"],
+["(49) Things are not (　　) they used to be.",["while","what","when","that"],2,"状況は以前とは違う。","what they used to be「昔のあるべき姿」。"],
+["(50) I have a friend (　　) father is a famous pianist.",["that","whose","who","whom"],2,"私にはお父さんが有名なピアニストの友人がいる。","a friend's father → 所有格 whose。"],
+["(51) “Hurry up or we'll be late!” “Don't worry. I'll be ready (　　) two minutes.”",["after","by","for","in"],4,"「急がないと遅れるよ！」「大丈夫、あと2分で準備できるよ。」","in ～「～後に」。"],
+["(52) Tom is (　　) a hard-working student than a mathematical genius.",["less","more","not","rather"],1,"トムは勤勉な生徒というより数学の天才だ。","less A than B「AというよりむしろB」。"],
+["(53) There was (　　) traffic in those days.",["a good deal","a lot","fewer","less"],1,"当時は交通量がかなり多かった。","a good deal of ～「かなりの量の」。"],
+["(54) You've never been to Europe, (　　) you?",["haven't","have","aren't","are"],2,"ヨーロッパに行ったことはないですよね。","否定文の付加疑問は肯定形。現在完了なので have you?"],
+["(55) They demanded that I (　　) the plan at once.",["carry out","carried out","had carried out","might carried out"],1,"彼らは私にすぐその計画を実行するよう要求した。","要求の demand の後は (should) ＋ 原形。"],
+["(56) (　　) he had a bad cold, he came to school to take the exam.",["Although","Because","However","Whether"],1,"ひどい風邪をひいていたが、彼は試験を受けに登校した。","Although「～だけれども」。"],
+["(57) The news (　　) her son survived the accident surprised us all.",["of","which","about","that"],4,"息子さんが事故で助かったという知らせに私たちは皆驚いた。","The news の内容を説明する同格の that。"],
+["(58) Apart (　　) a few minor problems, the trip was a great success.",["from","of","off","over"],1,"いくつかの小さな問題を除けば、旅行は大成功だった。","apart from ～「～を除いて」。"],
+["(59) If I had had enough time, I (　　) the museum.",["can visit","could visit","have visited","could have visited"],4,"十分な時間があったら、博物館を訪れることができただろうに。","if＋過去完了 → 主節は could have＋過去分詞。"],
+["(60) You should write down Satsuki's number (　　) you forget it.",["in case","in the case","so far as","so long as"],1,"忘れるといけないので、サツキの番号を書き留めておくべきだ。","in case ～「～する場合に備えて」。"],
+["(61) It is (　　) no means an easy task.",["at","for","on","by"],4,"それは決して簡単な仕事ではない。","by no means ～「決して～ない」。"],
+["(62) The shop closed because there were (　　) customers.",["some","no","any","a"],2,"客が一人もいなかったので、その店は閉まった。","no ＋ 複数名詞「一人も～ない」。"],
+["(63) He is (　　) talkative than he used to be.",["little","less","least","few"],2,"彼は以前ほどおしゃべりではない。","less ～ than …「…ほど～ではない」。"],
+["(64) Our task is to paint the wall in three weeks, (　　)?",["doesn't it","isn't it","aren't we","don't we"],2,"私たちの仕事は3週間で壁を塗ることですよね。","is の肯定文 → isn't it?"],
+["(65) The coffee shop opens at 7:30 and serves breakfast (　　) 10 o'clock.",["within","by","for","till"],4,"その喫茶店は7時30分に開き、10時まで朝食を出す。","継続の終点 → till。"],
+["(66) (　　) his advice, we would never have finished the work on time.",["Accepted","Excluding","Not for","Without"],4,"彼の助言がなければ、私たちは期限内に仕事を終えられなかっただろう。","Without ～「～がなければ」（仮定法）。"],
+["(67) I haven't seen Rick (　　) he returned from New Zealand.",["as","since","when","until"],2,"リックがニュージーランドから戻って以来、会っていない。","現在完了の継続 ＋ since「～以来」。"],
+["(68) (　　) it not been for your advice, I could never have passed the test.",["Had","Were","Have","Being"],1,"あなたの助言がなければ、私は試験に合格できなかっただろう。","If it had not been for の倒置 → Had it not been for。"],
+["(69) How often (　　) you go to Tokyo?",["do","does","are","is"],1,"どのくらいの頻度で東京へ行きますか。","一般動詞 go の疑問文 → do you。"],
+["(70) (　　) price you may pay, you can't have it.",["What","However","Whichever","Whatever"],4,"いくら払っても、それは手に入らない。","Whatever＋名詞＋may ～「どんな～でも」。"],
+["(71) (　　) talking about so heatedly then?",["What had you","What were you","What you were","What did you"],2,"そのとき何をそんなに熱くなって話していたの？","talk about の目的語が What で文頭へ。過去進行形の疑問文。"],
+["(72) Tell me the reason (　　) you did not come.",["why","which","how"],1,"あなたが来なかった理由を教えて。","reason を先行詞とする関係副詞は why。"],
+["(73) This is (　　) you have to do now.",["only","which","all","that"],3,"今あなたがしなければならないのはこれだけだ。","all (that) you have to do「～しなければならないすべて＝～だけ」。"],
+["(74) (　　) being a good baseball player, Taro is also an excellent painter.",["Although","However","Because","Besides"],4,"タロウは優れた野球選手であるだけでなく、優れた画家でもある。","Besides ～ing「～に加えて」。"],
+["(75) (　　) work is concerned, I always try to do my best.",["So long as","As much as","As soon as","So far as"],4,"仕事に関しては、私はいつも最善を尽くそうとする。","so far as ～ is concerned「～に関する限り」。"],
+["(76) If I (　　) the truth, I would tell you.",["know","knew","will known","have know"],2,"もし真実を知っていれば、あなたに話すのに。","主節が would ＋原形 → if節は仮定法過去 knew。"],
+["(77) This chimney is (　　) brick.",["built by","made of","building of","making from"],2,"この煙突はレンガでできている。","材料が見てそれと分かる → be made of。"],
+["(78) She is the professor from Taiwan (　　) I spoke with you.",["about whom","about that","whom","who"],1,"彼女は私があなたに話した台湾出身の教授だ。","speak about ～ の前置詞＋関係代名詞。前置詞の後に that は使えない。"],
+["(79) Thank you, Hiromi. This book is exactly (　　) I wanted.",["what","which","of which","that"],1,"ありがとう、ヒロミ。この本はまさに私が欲しかったものだ。","what I wanted「私が欲しかったもの」。先行詞がない。"],
+["(80) Don't listen to Joe (　　) much he complains.",["however","whatever","so","how"],1,"ジョーがどれだけ文句を言っても、聞いてはいけない。","however ＋形容詞/副詞 ＋ SV「どんなに～でも」。"],
+["(81) (　　) he is very late, he may have met with an accident on his way.",["Whether","If","Since","Why"],3,"彼はとても遅いので、途中で事故にあったのかもしれない。","Since「～なので」（理由）。"],
+["(82) I met a lady (　　) I thought was an actress.",["who","what","whom","whose"],1,"私は女優だと思った女性に会った。","I thought は挿入。was の主語になる主格 who。"],
+["(83) “I couldn't finish my homework yesterday.” If you (　　) me, I would have helped.",["had asked","have asked","should ask","would ask"],1,"「昨日宿題が終わらなかった。」「私に頼んでくれれば手伝ったのに。」","主節 would have helped → if節は過去完了 had asked。"],
+["(84) My hometown is quite different from (　　) it was twenty years ago.",["as","that","what","which"],3,"私の故郷は20年前とはずいぶん違う。","different from what it was「以前の姿」。"],
+["(85) You will fail the entrance examination (　　) you study hard.",["because","unless","if","when"],2,"一生懸命勉強しない限り、入試に落ちるだろう。","unless ～「～しない限り」。"],
+["(86) Work hard, (　　) you will succeed.",["when","and","otherwise","or"],2,"一生懸命働きなさい、そうすれば成功する。","命令文, and ～「そうすれば」。or なら「さもないと」。"],
+["(87) I can remember a time (　　) nobody knew the word “Internet”!",["as","when","which","while"],2,"誰も「インターネット」という言葉を知らなかった時代を覚えている！","time を先行詞とする関係副詞 when。"],
+["(88) Tokyo is located (　　) Saitama and Kanagawa prefectures.",["between","among","through","for"],1,"東京は埼玉県と神奈川県の間にある。","二つの間は between。"],
+["(89) You get up early, (　　) you?",["don't","doesn't","didn't","did"],1,"あなたは早起きですよね？","肯定文の付加疑問は否定形。You get → don't you?"],
+["(90) (　　) we may go, we can keep in contact with our family or friends by mobile phone.",["Wherever","Whatever","However","Whoever"],1,"どこへ行っても、携帯電話で家族や友人と連絡が取れる。","Wherever ～ may「どこへ～しようとも」。"],
+["(91) 私と同様彼も若くない。He is not young (　　) than I am.",["any more","no more","much more","so much"],1,"私と同様に彼も若くない。","not ～ any more than …「…でないのと同様～でない」。"],
+["(92) “He's a good skier, isn't he?” “Yes, he really is. I wish I (　　) like him.”",["could ski","can ski","will ski","ski"],1,"「彼はスキーが上手だよね。」「うん。私も彼みたいに滑れたらいいのに。」","I wish＋仮定法過去（could）＝現在の事実に反する願望。"],
+["(93) Parents often make sacrifices (　　) their children may receive a good education.",["so that","because","for"],1,"親は子どもが良い教育を受けられるよう、しばしば犠牲を払う。","so that ～ may「～するために」（目的）。"],
+["(94) Let's start (　　) the rain is over.",["by","as if","as soon as","till"],3,"雨が止んだらすぐ出発しよう。","as soon as ～「～するとすぐに」。"],
+["(95) He is one of the (　　) actors in the United States.",["great","greater","more great","greatest"],4,"彼はアメリカで最も偉大な俳優の一人だ。","one of the ＋最上級＋複数名詞。"],
+["(96) 高く上れば上るほど、ますます寒くなる。並べ替え：The (　　)(　　)(　　)(　　), the colder it becomes.　※語句①up ②colder ③we ④higher ⑤go のうち、空所に入る4語の正しい順番を選びなさい。",["higher we go up","we higher up go","up go higher we","higher go we up"],1,"高く上れば上るほど、ますます寒くなる。","the 比較級 ～, the 比較級 … の形。答えは The (④higher)(③we)(⑤go)(①up), the (②colder) it becomes. 並べ替え問題は選択式にしてあります。"],
+["(97) 散歩に出かけましょうか。Let's go out for a walk, (　　) we?",["will","shall","aren't","don't"],2,"散歩に出かけましょうか。","Let's ～, shall we?"],
+["(98) 彼は警官を見るとすぐに逃げた。The (　　) he saw the policeman, he ran away.",["second","moment","sooner","time"],2,"彼は警官を見るとすぐに逃げた。","the moment ～「～するとすぐ」（接続詞的）。"],
+["(99) She should have done (　　) she was told.",["that","which","so","as"],4,"彼女は言われたとおりにすべきだったのに。","as ～「～のように」。"],
+["(100) If you had left home a little earlier, you (　　) in time for that train.",["would have been","have been","are","were"],1,"もう少し早く家を出ていれば、あの電車に間に合ったのに。","if＋過去完了 → would have＋過去分詞。"],
+["(101) もし彼の助力がなければ、私は失敗するかもしれない。If it (　　) his help, I might fail.",["were not for","is not for","were not to","is not to"],1,"もし彼の助けがなければ、私は失敗するかもしれない。","If it were not for ～「～がなければ」（仮定法過去）。"],
+["(102) Be careful about (　　) you eat and drink each day.",["who","when","which","what"],4,"毎日の飲食物に注意しなさい。","eat と drink の目的語になる what。"],
+["(103) Do you know (　　) her birthday is?",["who","how","which","when"],4,"彼女の誕生日がいつか知っていますか。","間接疑問文。「いつ」→ when。"],
+["(104) 80歳以上まで長生きする人は少なくありません。(　　) people live to be over eighty.",["Not a few","Very few","Not a little","Very little"],1,"80歳以上まで長生きする人は少なくない。","not a few ＝ quite a few「少なからぬ（かなりの）数」。people は数えられる。"],
+["(105) あなたの夢が実現する日が必ず来るだろう。The day will surely come (　　) your dreams will come true.",["which","when","who","that"],2,"あなたの夢が実現する日が必ず来るだろう。","day を先行詞とする関係副詞 when。"],
+["(106) きのう彼は5時間勉強した。Yesterday he studied (　　) five hours.",["at","of","in","for"],4,"きのう彼は5時間勉強した。","期間の長さは for。"],
+["(107) 時間ほど貴重なものはない。(　　) is more precious than time, and yet nothing is less valued.",["Everything","Anything","Something","Nothing"],4,"時間ほど貴重なものはないが、時間ほど重んじられないものもない。","Nothing is more ～ than …「…ほど～なものはない」。"],
+["(108) 君が助言してくれていたら、私は成功したかもしれない。(　　) your advice, I might have succeeded.",["With","At","In","For"],1,"君が助言してくれていたら、私は成功したかもしれない。","With ～「～があれば」（仮定法の代用）。"],
+["(109) His mother continued talking (　　) nothing had happened.",["even if","as if","although if","whether if"],2,"彼の母は何事も起こらなかったかのように話し続けた。","as if ～「まるで～のように」。"],
+["(110) We worked as fast (　　) we (　　) all week, but we still couldn't satisfy his requirements.",["so, that","as, could","as, shall","so, will"],2,"私たちはこの1週間できるだけ速く仕事をしたが、彼の要求を満たせなかった。","as ～ as one can「できるだけ～」。過去なので could。"],
+["(111) He would be (　　) person to speak badly of his boss.",["none of","the least","no other","the last"],4,"彼は上司の悪口など決して言いそうもない人です。","the last ～ to …「最も…しそうにない～」。"],
+["(112) あなたがその本をきれいにしておきさえすれば、借りてもよい。You may borrow the book, as (　　) as you keep it clean.",["many","well","long","far"],3,"その本をきれいにしておく限り、借りてもよい。","as long as ～「～である限り（条件）」。"],
+["(113) 彼女は姉と同様に親切だ。She is (　　) kind than her sister.",["any more","as much","so much","no less"],4,"彼女は姉と同じくらい親切だ。","no less ～ than …「…に劣らず～」。"],
+["(114) He is taller than I (　　) a head.",["for","from","to","by"],4,"彼は私より頭ひとつ分背が高い。","差を表す by「～だけ」。"],
+["(115) 私はこの辞書を2,000円で買った。I bought this dictionary (　　) two thousand yen.",["to","with","by","for"],4,"私はこの辞書を2,000円で買った。","代金は for「～と引き換えに」。"],
+["(116) 彼は利口というよりもむしろ賢い。He is (　　) wise than clever.",["more","much","little","less"],1,"彼は利口というよりむしろ賢い。","more A than B「BというよりむしろA」。"],
+["(117) It will be quicker to walk (　　) to take a taxi.",["than","more","more than","much more"],1,"歩いて行くほうがタクシーに乗るより速いでしょう。","quicker は比較級 → than。"],
+["(118) 人間が月に旅行するのはもはや夢ではない。It is no (　　) a dream for man to travel to the moon.",["more","longer","farther","later"],2,"人間が月に旅行するのはもはや夢ではない。","no longer ～「もはや～ない」。"],
+["(119) この小説を読んだら、だれでも驚くだろう。(　　) reads this novel will be surprised.",["However","Whichever","Whoever","Whenever"],3,"この小説を読む人はだれでも驚くだろう。","Whoever ～ = Anyone who ～。"],
+["(120) 成功するかどうかはあなたの勉強しだいです。(　　) you succeed or not depends on how hard you study.",["What","Whether","That","Which"],2,"成功するかどうかは、どれだけ熱心に勉強するかしだいだ。","Whether ～ or not「～かどうか」（主語になる名詞節）。"],
+["(121) Mt. Fuji is higher than (　　) (　　) mountain in Japan.",["no other","another of","so many","any other"],4,"富士山は日本のほかのどの山よりも高い。","比較級 than any other ＋単数名詞。"],
+["(122) 彼女の話は本当かなと思った。I wondered (　　) her story was true.",["at","if","that","what"],2,"彼女の話は本当かなと思った。","wonder if ～「～かどうかと思う」。"],
+["(123) She always kept smiling no (　　) what happened.",["matter","problem","case","occasion"],1,"何が起ころうとも、彼女はほほえみを絶やさなかった。","no matter what ～「何が～しようとも」。"],
+["(124) このようにしてその問題は解かれた。This is (　　) the problem was solved.",["which","that","how","what"],3,"このようにしてその問題は解かれた。","This is how ～「このようにして～」。"],
+["(125) 私にもっとお金があったら車を買うのになあ。I (　　) a car if I had enough money.",["would have bought","bought","will buy","would buy"],4,"十分なお金があれば車を買うのになあ。","if＋過去形 → would＋原形（仮定法過去）。"],
+["(126) たとえ太陽が西から昇るようなことがあっても、約束はやぶりません。(　　) the sun to rise in the west, I would not break the promise.",["Were","Should","Had","If"],1,"たとえ太陽が西から昇っても、私は約束を破らない。","If the sun were to ～ の倒置 Were the sun to ～（万一の仮定）。"],
+["(127) 彼は年のわりには若く見える。He looks young (　　) his age.",["for","in","on","at"],1,"彼は年のわりには若く見える。","for ～「～のわりには」。"],
+["(128) 彼は制服を着ていると若く見える。He looks younger (　　) his uniform.",["at","with","in","on"],3,"彼は制服を着ていると若く見える。","in ＋衣服「～を着て」。"],
+["(129) I would like to know (　　) (　　) this car costs.",["how much","of which","that how","the price"],1,"この車の値段がいくらするか知りたいのですが。","間接疑問 how much this car costs（how muchで1つ目の選択肢）。"],
+["(130) If you want to master a foreign language, you must work as hard as (　　).",["able","can","could","possible"],4,"外国語を習得したいなら、できるだけ熱心に勉強しなければならない。","as ～ as possible「できるだけ～」。"],
+["(131) 君も一緒に来ればよかったのに。I wish you (　　) with me.",["come","would come","have come","had come"],4,"君も一緒に来ればよかったのに。","I wish＋仮定法過去完了 had＋過去分詞（過去の後悔）。"],
+["(132) 彼の新しい計画をどう思いますか。(　　) do you think of his new plan?",["How","What","Which","Who"],2,"彼の新しい計画をどう思いますか。","think of の目的語を問うので What。How は使えない。"],
+["(133) This is (　　) robot I have ever seen.",["most clever","more clever","the cleverest","much clever"],3,"こんなに賢いロボットは見たことがない。","the＋最上級＋(that) I have ever seen「今まで見た中で最も～」。"],
+["(134) これがきのう君が話していた本ですか。Is this the book you were (　　) yesterday?",["talking about","talking me","telling about","saying me"],1,"これがきのう君が話していた本ですか。","talk about ～ の前置詞が残る形。"],
+["(135) Robert (　　) goes to concerts because they are so expensive.",["often","usually","seldom","recently"],3,"ロバートは高価なのでめったにコンサートへ行かない。","seldom「めったに～ない」。理由と意味が合うもの。"],
+["(136) 彼は私より2歳年上だ。He is (　　) than I (　　) two years.",["older, am","younger, am","older, by","elder, by"],3,"彼は私より2歳年上だ。","older than I by two years（差を表す by）。"],
+["(137) 私の兄は1980年の11月18日に生まれた。My elder brother was born (　　) November 18, 1980.",["on","in","at","of"],1,"私の兄は1980年11月18日に生まれた。","日付は on。"],
+["(138) これは私が買いたかった、まさにその本です。This is the very book (　　) I wanted to buy.",["what","with which","of that","that"],4,"これは私が買いたかった、まさにその本だ。","the very が付く先行詞 → 関係代名詞 that。"],
+["(139) コーヒーは少しも残っていない。There isn't (　　) coffee left.",["few","little","any","some"],3,"コーヒーは少しも残っていない。","否定文では any。"],
+["(140) 理論と実践とは常に両立するとは限らない。Theory and practice do not (　　) go together.",["frequently","often","always","usually"],3,"理論と実践は常に両立するとは限らない。","not always ～「常に～とは限らない」（部分否定）。"],
+["(141) 私たちはことばによって思想を表現する。We express our thoughts by (　　) of words.",["purpose","way","means","form"],3,"私たちはことばによって思想を表現する。","by means of ～「～によって」。"],
+["(142) どんな音楽にいちばん興味をお持ちですか。(　　) of music are you interested in most?",["How kind","What is kind","How is kind","What kind"],4,"どんな種類の音楽にいちばん興味がありますか。","What kind of ～「どんな種類の～」。"],
+["(143) Michael works very hard. That's (　　) I respect him.",["how","the person","the thing","why"],4,"マイケルはとても熱心に働く。だから私は彼を尊敬している。","That's why ～「そういうわけで～」（結果）。"],
+["(144) 今朝天気が大変悪かったので、タクシーに乗らねばならなかった。This morning the weather was (　　) bad that I had to take a taxi.",["as","very","so","too"],3,"今朝は天気がとても悪かったので、タクシーに乗らなければならなかった。","so ～ that …「とても～なので…」。"],
+["(145) 鉛筆でそれを書いてもよい。You may write it (　　) a pencil.",["with","by","to","down"],1,"鉛筆でそれを書いてもよい。","道具・手段は with。"],
+["(146) 彼女はまもなく戻るだろう。It will not be long (　　) she comes back.",["until","by","before","after"],3,"彼女はまもなく戻るだろう。","It will not be long before ～「まもなく～する」。"],
+["(147) 私は夏の別荘を建てられるようにその土地を購入した。I bought the land (　　) (　　) I could build a summer house.",["so that","because of","as to","instead of"],1,"夏の別荘を建てられるように、その土地を購入した。","so that ～ can/could「～するために」（目的）。"],
+["(148) ここが彼が生まれた町です。This is the town (　　) which he was born.",["to","in","on","at"],2,"ここが彼が生まれた町です。","be born in ～ → in which。"],
+["(149) He learned to speak fluent Japanese in only one year, (　　) surprised me.",["that","who","which","it"],3,"彼はたった1年で流暢な日本語を話せるようになり、そのことに私は驚いた。","前文全体を受ける非制限用法の which。"],
+["(150) 彼女は女優というよりもむしろ歌手だ。She is not (　　) (　　) an actress as a singer.",["rather than","much really","so many","so much"],4,"彼女は女優というよりむしろ歌手だ。","not so much A as B「AというよりむしろB」。"],
+["(151) その列車は雪のために遅れた。The train was late because (　　) the snow.",["in","to","of","for"],3,"その列車は雪のために遅れた。","because of ＋名詞「～のために」。"],
+["(152) 君はその法案に賛成なのか反対なのか。Are you (　　) the bill?",["with or without","forward or backward","up or down","for or against"],4,"君はその法案に賛成なのか反対なのか。","for or against「賛成か反対か」。"],
+["(153) 通りを横切るときは、どんなに注意しても注意しすぎることはない。You cannot be (　　) careful when you cross the street.",["so","too","enough","very"],2,"通りを横切るときは、いくら注意してもしすぎることはない。","cannot ～ too …「いくら…しても～しすぎない」。"],
+["(154) 大切なのは何を読むかではなくて、どう読むかだ。The important thing is not what you read (　　) how you read it.",["or","because","and","but"],4,"大切なのは何を読むかではなく、どう読むかだ。","not A but B「AではなくB」。"],
+["(155) 私のクラスの中でビルほど背の高い少年はいない。No (　　) boy in my class is as tall as Bill.",["another","other","any","either"],2,"私のクラスにはビルほど背の高い少年はいない。","No other ＋単数名詞 is as ～ as …。"],
+["(156) 人々は、地球は平らだと信じていた。People believed (　　) the earth was flat.",["if","whether","that","unless"],3,"人々は、地球は平らだと信じていた。","believe の目的語になる名詞節の that。"],
+["(157) 彼が滞在しているホテルを知っていますか。Do you know the hotel (　　) he is staying?",["where","what","which","that"],1,"彼が滞在しているホテルを知っていますか。","後ろが完全な文 → 関係副詞 where。"],
+["(158) その結果は全く満足のいくものではなかった。The result was (　　) being satisfactory.",["by far","so far","far from","far away"],3,"その結果は全く満足のいくものではなかった。","far from ～「決して～ではない」。"],
+["(159) 昨夜だれがこの部屋でテレビを見ていたと思いますか。(　　) was watching TV in this room last night?",["Who do you think","Who you think","What do you think","What you think"],1,"昨夜だれがこの部屋でテレビを見ていたと思いますか。","疑問詞を文頭に出す形：Who do you think ～?（Yes/Noで答えられない）"],
+["(160) 出発するかしないうちに雨が降りだした。We had hardly started (　　) it began to rain.",["until","by","after","when"],4,"出発するかしないうちに雨が降りだした。","hardly ～ when/before …「～するとすぐ…」。"],
+["(161) 水がなかったならば、何ものも生きることはできないだろう。Were it not (　　) water, nothing could live.",["to","for","with","by"],2,"水がなければ、何ものも生きられないだろう。","Were it not for ～ = If it were not for ～（倒置）。"]
+];
+const A=document.getElementById('app');
+let order,i,wrong,score;
+function start(list){order=list.slice();i=0;wrong=[];score=0;show()}
+function home0(){A.innerHTML=`<h1>英語 一問一答（即戦ゼミ11）</h1><div class="card">収録：${Q.length}問（(5)〜(161)・全問）</div><button class="p" id="a">最初から始める</button><button class="p" id="b">ランダムで始める</button>`;
+a.onclick=()=>start(Q.map((_,k)=>k));b.onclick=()=>start(Q.map((_,k)=>k).sort(()=>Math.random()-.5))}
+function show(){
+ if(i>=order.length)return end();
+ const q=Q[order[i]];
+ A.innerHTML=`<div class="s">${i+1} / ${order.length}　正解 ${score}</div><div class="card">${q[0]}</div>`+q[1].map((c,k)=>`<button data-k="${k+1}">${k+1}. ${c}</button>`).join('')+`<div id="r"></div>`;
+ A.querySelectorAll('button[data-k]').forEach(b=>b.onclick=()=>ans(+b.dataset.k,q))}
+function ans(k,q){
+ const good=k===q[2];
+ if(good)score++;else wrong.push(order[i]);
+ A.querySelectorAll('button[data-k]').forEach(b=>{b.disabled=true;const n=+b.dataset.k;if(n===q[2])b.classList.add('ok');else if(n===k)b.classList.add('ng')});
+ r.innerHTML=`<div class="card"><b style="color:var(--${good?'ok':'ng'})">${good?'⭕ 正解！':'❌ 不正解（正解：'+q[2]+'）'}</b><br>訳：${q[3]}<br>解説：${q[4]}</div><button class="p" id="n">次へ</button>`;
+ n.onclick=()=>{i++;show()}}
+function end(){
+ A.innerHTML=`<h1>結果：${score} / ${order.length}</h1>`+(wrong.length?`<div class="card">間違えた問題：${wrong.length}問<br>`+wrong.map(w=>`<div class="s">${Q[w][0]}</div>`).join('')+`</div><button class="p" id="w">間違えた問題だけやり直す</button>`:`<div class="card">全問正解！🎉</div>`)+`<button class="p" id="h">トップへ</button>`;
+ if(wrong.length)w.onclick=()=>start(wrong);h.onclick=home}
+const PG=[[1,21],[22,46],[47,70],[71,95],[96,112],[113,129],[130,146],[147,161]];
+const num=q=>+q[0].match(/^\((\d+)\)/)[1];
+function home(){
+ A.innerHTML=`<h1>英語 一問一答（即戦ゼミ11）</h1><div class="card">収録：${Q.length}問</div><div class="card"><b>出題範囲（プリントのページ）</b>`+PG.map((p,k)=>`<label style="display:block;padding:7px 0"><input type="checkbox" class="pg" value="${k}"> P${k+1}：(${p[0]})〜(${p[1]})</label>`).join('')+`<label style="display:block;padding:10px 0 0"><input type="checkbox" id="rnd"> ランダム順</label></div><button class="p" id="go">出題開始（未選択なら全範囲）</button>`;
+ go.onclick=()=>{const sel=[...A.querySelectorAll('.pg:checked')].map(c=>PG[+c.value]);
+  const ids=Q.map((_,k)=>k).filter(k=>!sel.length||sel.some(p=>num(Q[k])>=p[0]&&num(Q[k])<=p[1]));
+  if(rnd.checked)ids.sort(()=>Math.random()-.5);
+  if(ids.length)start(ids)}}
+home();
+</script></body></html>
